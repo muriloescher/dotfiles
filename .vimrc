@@ -8,9 +8,9 @@ set relativenumber
 filetype indent plugin on
 set autoindent
 set expandtab
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set backspace=indent,eol,start
 set fo=tcroq
 set wrap 
@@ -22,6 +22,7 @@ set laststatus=2
 "set laststatus=%f
 
 " Teste de mudança do ESC
+vnoremap <tab> >
 inoremap kj <esc>
 cnoremap kj <C-C>
 
@@ -32,10 +33,11 @@ if extension == "c"
     nnoremap <F7> :w<cr> :!gcc % -o %< -lm<cr> :!./%<<cr>
 elseif extension == "tex"
     set autoindent!
-    set textwidth=100
+    set textwidth=9999
     nnoremap <F7> :w<cr> :!pdflatex %<cr> :!latexmk -c<cr>
     nnoremap ,eq i\begin{equation*}<cr>\end{equation*}<esc>k>j..o
     nnoremap ,al i\begin{align*}<cr>\end{align*}<esc>k>j..o
+    inoremap bgs \bigskip
     set relativenumber
     set tabstop=2
     set softtabstop=2
@@ -43,7 +45,13 @@ elseif extension == "tex"
 elseif extension == "py"
     nnoremap <F7> :w<cr> :!python3 %<cr>
 elseif extension == "cpp"
+    nnoremap <F5> :w<cr> :!g++ -std=c++11 -O2 -Wall % -o %<<cr>
+    nnoremap <F6> :!./%<<cr>
     nnoremap <F7> :w<cr> :!g++ -std=c++11 -O2 -Wall % -o %<<cr> :!./%<<cr>
+elseif extension == "pas"
+    nnoremap <F5> :w<cr> :!fpc %<cr>
+    nnoremap <F6> :!./%<<cr>
+    nnoremap <F7> :w<cr> :!fpc %<cr> :!./%<<cr>
 endif
 
 
@@ -52,11 +60,18 @@ nnoremap ,c :-1read $HOME/.vim/.skeleton.c<CR>4j4li
 
 
 " Automaticamente lê um modelo .c para novos arquivos criados
-autocmd BufNewFile *.c -1read $HOME/.vim/.skeleton.c | execute "normal 4j4l" | execute "startinsert" 
+autocmd BufNewFile *.c -1read $HOME/.vim/modelo.c | execute "normal 4j4l" | execute "startinsert" 
+
 " Automaticamente lê um modelo .tex para novos arquivos criados
-autocmd BufNewFile ILC_Lista* -1read $HOME/.vim/.listailc.tex | execute "normal 8j12l" | execute "startinsert" 
+autocmd BufNewFile *.tex -1read $HOME/.vim/modelo.tex | execute "normal 8j12l" | execute "startinsert" 
+
+"autocmd BufNewFile ILC_Lista* -1read $HOME/.vim/.listailc.tex | execute "normal 8j12l" | execute "startinsert" 
+
 " Automaticamente lê um modelo .cpp para novos arquivos criados
-autocmd BufNewFile *.cpp -1read $HOME/.vim/.cp.cpp | execute "normal 6j4l" | execute "startinsert" 
+autocmd BufNewFile *.cpp -1read $HOME/.vim/modelo.cpp | execute "normal 3j3l" | execute "startinsert"
+
+" Automaticamente lê um modelo .pas para novos arquivos criados
+autocmd BufNewFile *.pas -1read $HOME/.vim/modelo.pas | execute "normal 8l" | execute "startinsert" 
 
 " Ps = 0  -> blinking block.
 " Ps = 1  -> blinking block (default).
