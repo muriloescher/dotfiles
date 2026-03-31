@@ -1,0 +1,100 @@
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding = { x = 10, y = 10 }
+dynamic_padding = true
+decorations = "none"
+opacity = 1.0
+startup_mode = "Windowed"
+dynamic_title = true
+
+[scrolling]
+history = 20000
+multiplier = 3
+
+[font]
+size = 11.5
+
+[font.normal]
+family = "JetBrainsMono Nerd Font"
+style = "Regular"
+
+[font.bold]
+family = "JetBrainsMono Nerd Font"
+style = "Bold"
+
+[font.italic]
+family = "JetBrainsMono Nerd Font"
+style = "Italic"
+
+[font.bold_italic]
+family = "JetBrainsMono Nerd Font"
+style = "Bold Italic"
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+unfocused_hollow = true
+
+[mouse]
+hide_when_typing = true
+
+[colors.primary]
+#background = "#11111b"
+background = "#0b0b12"
+foreground = "#e6e9ef"
+
+[colors.cursor]
+text = "#11111b"
+cursor = "#f5e0dc"
+
+[colors.vi_mode_cursor]
+text = "#11111b"
+cursor = "#a6e3a1"
+
+[colors.selection]
+text = "#11111b"
+background = "#cdd6f4"
+
+[colors.search.matches]
+foreground = "#11111b"
+background = "#a6adc8"
+
+[colors.search.focused_match]
+foreground = "#11111b"
+background = "#a6e3a1"
+
+[colors.normal]
+black = "#45475a"
+red = "#f38ba8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#cba6f7"
+cyan = "#94e2d5"
+white = "#bac2de"
+
+[colors.bright]
+black = "#585b70"
+red = "#f38ba8"
+green = "#a6e3a1"
+yellow = "#f9e2af"
+blue = "#89b4fa"
+magenta = "#cba6f7"
+cyan = "#94e2d5"
+white = "#ffffff"
+
+[keyboard]
+bindings = [
+  { key = "Space", mods = "Shift|Control", mode = "~Search", action = "ToggleViMode" },
+  { key = "Escape", mode = "Vi|~Search", action = "ClearSelection" },
+  { key = "Escape", mode = "Vi|~Search", action = "ToggleViMode" },
+  { key = "Y", mods = "Control", mode = "Vi|~Search", action = "Copy" },
+  { key = "Slash", mods = "Shift", mode = "Vi|~Search", action = "SearchForward" },
+  { key = "Slash", mode = "Vi|~Search", action = "SearchBackward" },
+  { key = "N", mods = "Shift", mode = "Search|Vi", action = "SearchPrevious" },
+  { key = "N", mode = "Search|Vi", action = "SearchNext" }
+]

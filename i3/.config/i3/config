@@ -1,0 +1,273 @@
+# =========================
+# i3 config
+# =========================
+
+# ---------- Mod key ----------
+set $mod Mod4
+
+# ---------- Appearance ----------
+font pango:JetBrains Mono 12
+
+default_border pixel 0
+default_floating_border pixel 1
+hide_edge_borders smart
+
+gaps inner 14
+gaps outer 8
+smart_gaps inverse_outer
+smart_borders on
+
+floating_modifier $mod
+tiling_drag modifier titlebar
+
+
+
+# =========================
+# Workspaces
+# =========================
+
+set $ws1  "1:term"
+set $ws2  "2:web"
+set $ws3  "3:code"
+set $ws4  "4:mail"
+set $ws5  "5:files"
+set $ws6  "6:pdfs"
+set $ws7  "7:music"
+set $ws8  "8:misc"
+set $ws9  "9:vm"
+set $ws10 "10:extra"
+
+# App → workspace assignments
+assign [class="firefox_firefox"] $ws2
+assign [class="Code"] $ws3
+assign [class="thunderbird_thunderbird"] $ws4
+assign [class="Zathura"] $ws6
+assign [class="Spotify"] $ws7
+
+# Workspace → monitor assignments
+workspace $ws2 output DisplayPort-0
+workspace $ws4 output eDP
+workspace $ws6 output HDMI-A-0
+workspace $ws7 output eDP
+
+
+# =========================
+# Custom paths
+# =========================
+
+set $fileroot $HOME
+set $uniroot $HOME/Documents/uni/master
+
+
+# =========================
+# Startup / autostart
+# =========================
+
+# XDG autostart
+exec --no-startup-id dex --autostart --environment i3
+
+# Tray / background services
+exec --no-startup-id nm-applet
+exec --no-startup-id xautolock -time 15 -locker ~/.config/i3/lock-if-battery.sh
+
+# Startup apps
+exec --no-startup-id i3-msg 'workspace $ws2; exec firefox'
+# exec --no-startup-id i3-msg 'workspace $ws3; exec code'
+exec --no-startup-id i3-msg 'workspace $ws4; exec thunderbird'
+exec --no-startup-id i3-msg 'workspace $ws7; exec spotify'
+exec --no-startup-id i3-msg 'workspace $ws1; exec alacritty'
+exec --no-startup-id i3-msg 'workspace $ws1'
+
+# Always run on reload
+exec_always --no-startup-id autorandr --change --skip-options x-prop-colorspace,x-prop-broadcast_rgb
+exec_always --no-startup-id ~/.config/picom/launch.sh
+exec_always --no-startup-id ~/.config/polybar/scripts/launch.sh
+exec_always --no-startup-id feh --bg-fill ~/Pictures/wallpapers/wallpaper.jpg
+
+# Input device settings
+exec_always --no-startup-id xinput set-prop "06CB0001:00 06CB:CE78 Touchpad" "libinput Natural Scrolling Enabled" 1
+exec_always --no-startup-id xinput set-prop "06CB0001:00 06CB:CE78 Touchpad" "libinput Tapping Enabled" 1
+exec_always --no-startup-id xinput set-prop "06CB0001:00 06CB:CE78 Touchpad" "libinput Click Method Enabled" 0 1
+
+# Special key remap
+exec_always --no-startup-id xmodmap -e 'keycode 172 = XF86AudioPlay'
+
+
+# =========================
+# Application launchers
+# =========================
+
+# Terminal
+bindsym $mod+Return exec alacritty
+
+# App launcher
+bindsym $mod+d exec rofi -show drun -theme ~/.config/rofi/theme.rasi
+
+# File launcher (any file from home)
+bindsym $mod+Shift+f exec --no-startup-id bash -lc 'fdfind . "$fileroot" 2>/dev/null | sed "s|^$fileroot/||" | rofi -dmenu -i -p "Files" -theme ~/.config/rofi/theme.rasi | xargs -r -I{} xdg-open "$fileroot/{}"'
+
+# University PDF launcher
+bindsym $mod+Ctrl+f exec --no-startup-id bash -lc 'fdfind -e pdf . "$uniroot" 2>/dev/null | sed "s|^$uniroot/||" | rofi -dmenu -i -p "Uni PDFs" -theme ~/.config/rofi/theme.rasi | xargs -r -I{} zathura "$uniroot/{}"'
+
+
+# =========================
+# Window management
+# =========================
+
+# Kill focused window
+bindsym $mod+Shift+q kill
+
+# Focus movement
+bindsym $mod+h focus left
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+bindsym $mod+l focus right
+
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up    focus up
+bindsym $mod+Right focus right
+
+# Move focused window
+bindsym $mod+Shift+h move left
+bindsym $mod+Shift+j move down
+bindsym $mod+Shift+k move up
+bindsym $mod+Shift+l move right
+
+bindsym $mod+Shift+Left  move left
+bindsym $mod+Shift+Down  move down
+bindsym $mod+Shift+Up    move up
+bindsym $mod+Shift+Right move right
+
+# Split orientation
+bindsym $mod+b split h
+bindsym $mod+v split v
+
+# Layouts
+bindsym $mod+f fullscreen toggle
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+
+# Floating / focus modes
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+bindsym $mod+a focus parent
+
+
+# =========================
+# Workspace switching
+# =========================
+
+# Switch to workspace
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+bindsym $mod+5 workspace $ws5
+bindsym $mod+6 workspace $ws6
+bindsym $mod+7 workspace $ws7
+bindsym $mod+8 workspace $ws8
+bindsym $mod+9 workspace $ws9
+bindsym $mod+0 workspace $ws10
+
+# Move container to workspace
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+bindsym $mod+Shift+5 move container to workspace $ws5
+bindsym $mod+Shift+6 move container to workspace $ws6
+bindsym $mod+Shift+7 move container to workspace $ws7
+bindsym $mod+Shift+8 move container to workspace $ws8
+bindsym $mod+Shift+9 move container to workspace $ws9
+bindsym $mod+Shift+0 move container to workspace $ws10
+
+
+# =========================
+# Resize mode
+# =========================
+
+mode "resize" {
+    bindsym h resize shrink width 2 px or 2 ppt
+    bindsym j resize grow height 2 px or 2 ppt
+    bindsym k resize shrink height 2 px or 2 ppt
+    bindsym l resize grow width 2 px or 2 ppt
+
+    bindsym Left  resize shrink width 2 px or 2 ppt
+    bindsym Down  resize grow height 2 px or 2 ppt
+    bindsym Up    resize shrink height 2 px or 2 ppt
+    bindsym Right resize grow width 2 px or 2 ppt
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
+}
+
+bindsym $mod+r mode "resize"
+
+
+# =========================
+# Media / brightness
+# =========================
+
+# Volume
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10%
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10%
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# Media playback
+bindcode 172 exec --no-startup-id playerctl play-pause
+bindsym XF86AudioNext exec --no-startup-id playerctl next
+bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+
+# Brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
+bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
+
+
+# =========================
+# Screenshots
+# =========================
+
+bindsym Print exec scrot -s ~/screenshots/%Y-%m-%d_%H-%M-%S.png
+bindsym $mod+Shift+s exec maim -s | xclip -selection clipboard -t image/png
+
+
+# =========================
+# Lock / session control
+# =========================
+
+bindsym $mod+Shift+x exec --no-startup-id i3lock
+
+bindsym $mod+Shift+c reload
+bindsym $mod+Shift+r restart
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -f 'pango:JetBrains Mono 20' -m 'Exit i3?' -B 'Yes' 'i3-msg exit'"
+
+
+# =========================
+# Custom scripts / helpers
+# =========================
+
+# Move Firefox / Zoom workspace
+bindsym $mod+Shift+o exec --no-startup-id ~/.scripts/move-workspace-firefox-zoom.py right
+bindsym $mod+Shift+p exec --no-startup-id ~/.scripts/move-workspace-firefox-zoom.py left
+bindsym $mod+Shift+u exec --no-startup-id ~/.scripts/move-workspace-firefox-zoom.py up
+
+# Voice dictation
+bindsym $mod+n exec --no-startup-id /home/murilo/.local/bin/nerd-dictation-start
+bindsym $mod+Shift+n exec --no-startup-id /home/murilo/.local/bin/nerd-dictation-stop
+
+# =========================
+# Window colors
+# =========================
+
+# class                 border    background  text      indicator   child_border
+client.focused          #cba6f7   #11111b     #e6e9ef   #cba6f7     #cba6f7
+client.focused_inactive #313244   #11111b     #cdd6f4   #313244     #313244
+client.unfocused        #181825   #11111b     #a6adc8   #181825     #181825
+client.urgent           #f38ba8   #f38ba8     #11111b   #f38ba8     #f38ba8
+client.placeholder      #181825   #181825     #cdd6f4   #181825     #181825
+
+client.background       #11111b
