@@ -119,7 +119,7 @@ if ! shopt -oq posix; then
 fi
 
 alias tum='cd ~/Documents/uni/master/'
-alias ls='ls -av'
+alias ls='ls --color=auto -av'
 alias t="tmux new -As"
 
 # opencode
