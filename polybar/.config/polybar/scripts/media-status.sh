@@ -18,8 +18,8 @@ write_state() {
 
   local icon=""
   case "$status" in
-    Playing) icon="" ;;
-    Paused)  icon="" ;;
+    Playing) icon=" " ;;
+    Paused)  icon=" " ;;
     *)       : > "$STATE_FILE"; return ;;
   esac
 
