@@ -32,7 +32,7 @@ write_state() {
 
 init_state() {
   local line
-  line="$(playerctl metadata --format '{{markup_escape(default(artist, ""))}}	{{markup_escape(default(title, ""))}}	{{status}}' 2>/dev/null | head -n1)" || true
+  line="$(playerctl metadata --format '{{default(artist, "")}}	{{default(title, "")}}	{{status}}' 2>/dev/null | head -n1)" || true
   [ -z "$line" ] && { : > "$STATE_FILE"; return; }
 
   IFS=$'\t' read -r artist title status <<< "$line"
@@ -40,7 +40,7 @@ init_state() {
 }
 
 watch_player() {
-  playerctl --follow metadata --format '{{markup_escape(default(artist, ""))}}	{{markup_escape(default(title, ""))}}	{{status}}' 2>/dev/null |
+  playerctl --follow metadata --format '{{default(artist, "")}}	{{default(title, "")}}	{{status}}' 2>/dev/null |
   while IFS=$'\t' read -r artist title status; do
     write_state "$artist" "$title" "$status"
   done
