@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 WIDTH=20
-STEP_DELAY=0.4
+STEP_DELAY=0.3
 GAP=" • "
 
 STATE_FILE="/tmp/polybar-media-state"
@@ -18,15 +18,15 @@ write_state() {
 
   local icon=""
   case "$status" in
-    Playing) icon=" " ;;
-    Paused)  icon=" " ;;
+    Playing) icon="" ;;
+    Paused)  icon="" ;;
     *)       : > "$STATE_FILE"; return ;;
   esac
 
   if [ -n "$artist" ]; then
-    printf '%s%s - %s\n' "$icon" "$artist" "$title" > "$STATE_FILE"
+    printf '%s\t%s - %s\n' "$icon" "$artist" "$title" > "$STATE_FILE"
   else
-    printf '%s%s\n' "$icon" "$title" > "$STATE_FILE"
+    printf '%s\t%s\n' "$icon" "$title" > "$STATE_FILE"
   fi
 }
 
@@ -47,22 +47,27 @@ watch_player() {
 }
 
 render_window() {
-  local text="$1"
-  local pos="$2"
+  local icon="$1"
+  local text="$2"
+  local pos="$3"
 
   if [ -z "$text" ]; then
     printf '\n'
     return
   fi
 
-  if [ "${#text}" -le "$WIDTH" ]; then
-    printf '%-*s\n' "$WIDTH" "$text"
+  local prefix="${icon} "
+  local text_width=$((WIDTH - ${#prefix}))
+  [ "$text_width" -lt 1 ] && text_width=1
+
+  if [ "${#text}" -le "$text_width" ]; then
+    printf '%s%-*s\n' "$prefix" "$text_width" "$text"
     return
   fi
 
   local scroll_text="${text}${GAP}"
   local doubled="${scroll_text}${scroll_text}"
-  printf '%s\n' "${doubled:$pos:$WIDTH}"
+  printf '%s%s\n' "$prefix" "${doubled:$pos:$text_width}"
 }
 
 init_state
@@ -71,20 +76,31 @@ WATCH_PID=$!
 
 trap 'kill "$WATCH_PID" 2>/dev/null' EXIT
 
-last_text=""
+last_line=""
 pos=0
 
 while true; do
-  text="$(cat "$STATE_FILE" 2>/dev/null)"
+  line="$(cat "$STATE_FILE" 2>/dev/null)"
 
-  if [ "$text" != "$last_text" ]; then
+  if [ "$line" != "$last_line" ]; then
     pos=0
-    last_text="$text"
+    last_line="$line"
   fi
 
-  render_window "$text" "$pos"
+  if [ -z "$line" ]; then
+    printf '\n'
+    sleep "$STEP_DELAY"
+    continue
+  fi
 
-  if [ -n "$text" ] && [ "${#text}" -gt "$WIDTH" ]; then
+  IFS=$'\t' read -r icon text <<< "$line"
+  render_window "$icon" "$text" "$pos"
+
+  prefix="${icon} "
+  text_width=$((WIDTH - ${#prefix}))
+  [ "$text_width" -lt 1 ] && text_width=1
+
+  if [ -n "$text" ] && [ "${#text}" -gt "$text_width" ]; then
     cycle_len=$((${#text} + ${#GAP}))
     pos=$(((pos + 1) % cycle_len))
   else
