@@ -20,3 +20,4 @@ fi
 
 ln -sfn "$img" "$CURRENT_LINK"
 feh --bg-fill "$CURRENT_LINK"
+"$HOME/.local/bin/generate-lockscreen" >/dev/null
