@@ -84,6 +84,7 @@ exec_always --no-startup-id ~/.config/picom/launch.sh
 exec_always --no-startup-id ~/.config/polybar/scripts/launch.sh
 exec_always --no-startup-id ~/.local/bin/set-wallpaper
 exec_always --no-startup-id ~/.config/i3/display-power.sh
+exec_always --no-startup-id restore-pdf-layout
 
 # Input device settings
 exec_always --no-startup-id xinput set-prop "06CB0001:00 06CB:CE78 Touchpad" "libinput Natural Scrolling Enabled" 1

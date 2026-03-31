@@ -121,6 +121,7 @@ fi
 alias tum='cd ~/Documents/uni/master/'
 alias ls='ls --color=auto -av'
 alias t="tmux new -As"
+alias bye='save-pdf-layout && poweroff'
 
 # opencode
 export PATH=/home/murilo/.opencode/bin:$PATH

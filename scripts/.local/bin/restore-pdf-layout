@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CACHE_FILE="$HOME/.cache/zathura-open-files"
+
+[ -f "$CACHE_FILE" ] || exit 0
+
+i3-msg 'workspace 6:pdfs' > /dev/null
+
+while IFS= read -r pdf; do
+    [ -n "$pdf" ] || continue
+    [ -f "$pdf" ] || continue
+    nohup zathura "$pdf" >/dev/null 2>&1 &
+    sleep 0.2
+done < "$CACHE_FILE"

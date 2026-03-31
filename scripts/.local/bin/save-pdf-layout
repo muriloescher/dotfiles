@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+CACHE_DIR="$HOME/.cache"
+CACHE_FILE="$CACHE_DIR/zathura-open-files"
+
+mkdir -p "$CACHE_DIR"
+
+pgrep -af zathura | awk '
+{
+    for (i = 3; i <= NF; i++) {
+        printf "%s%s", $i, (i < NF ? OFS : ORS)
+    }
+}' > "$CACHE_FILE"
