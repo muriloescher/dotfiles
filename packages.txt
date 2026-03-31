@@ -25,6 +25,7 @@ wget
 curl
 jq
 neovim
+tmux
 thunderbird
 spotify-client
 firefox

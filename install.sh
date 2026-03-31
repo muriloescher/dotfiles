@@ -12,6 +12,8 @@ STOW_PACKAGES=(
   alacritty
   scripts
   wallpapers
+  tmux
+  bash
 )
 
 if [[ ! -f "$PACKAGES_FILE" ]]; then
