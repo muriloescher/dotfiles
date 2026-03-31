@@ -10,6 +10,8 @@ STOW_PACKAGES=(
   polybar
   rofi
   alacritty
+  scripts
+  wallpapers
 )
 
 if [[ ! -f "$PACKAGES_FILE" ]]; then

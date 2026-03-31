@@ -28,3 +28,5 @@ neovim
 thunderbird
 spotify-client
 firefox
+i3lock
+imagemagick

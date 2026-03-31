@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SRC="$HOME/.local/share/wallpapers/current"
+OUT="$HOME/.cache/lockscreen.png"
+
+mkdir -p "$HOME/.cache"
+
+if [[ ! -e "$SRC" ]]; then
+  echo "Current wallpaper symlink not found: $SRC" >&2
+  exit 1
+fi
+
+read -r WIDTH HEIGHT < <(
+  xrandr | awk '/current/ {gsub(/,/, "", $10); print $8, $10}'
+)
+
+magick "$SRC" \
+  -resize "${WIDTH}x${HEIGHT}^" \
+  -gravity center \
+  -extent "${WIDTH}x${HEIGHT}" \
+  "$OUT"
+
+printf '%s\n' "$OUT"

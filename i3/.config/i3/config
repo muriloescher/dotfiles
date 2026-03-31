@@ -82,7 +82,7 @@ exec --no-startup-id i3-msg 'workspace $ws1'
 exec_always --no-startup-id autorandr --change --skip-options x-prop-colorspace,x-prop-broadcast_rgb
 exec_always --no-startup-id ~/.config/picom/launch.sh
 exec_always --no-startup-id ~/.config/polybar/scripts/launch.sh
-exec_always --no-startup-id feh --bg-fill ~/Pictures/wallpapers/wallpaper.jpg
+exec_always --no-startup-id ~/.local/bin/set-wallpaper
 exec_always --no-startup-id ~/.config/i3/display-power.sh
 
 # Input device settings

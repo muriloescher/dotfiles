@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+WALL_DIR_1="$HOME/.local/share/wallpapers/curated"
+WALL_DIR_2="$HOME/.local/share/wallpapers/downloaded"
+CURRENT_LINK="$HOME/.local/share/wallpapers/current"
+
+mkdir -p "$WALL_DIR_1" "$WALL_DIR_2"
+
+img="$(
+  find "$WALL_DIR_1" "$WALL_DIR_2" -type f \( \
+    -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \
+  \) | shuf -n 1
+)"
+
+if [[ -z "${img:-}" ]]; then
+  echo "No wallpapers found in $WALL_DIR_1 or $WALL_DIR_2" >&2
+  exit 1
+fi
+
+ln -sfn "$img" "$CURRENT_LINK"
+feh --bg-fill "$CURRENT_LINK"

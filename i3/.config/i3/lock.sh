@@ -1,3 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-exec i3lock -i "$HOME/Pictures/wallpapers/lockscreen.png" -e
+PNG="$("$HOME/.local/bin/generate-lockscreen")"
+exec i3lock -i "$PNG" -e
