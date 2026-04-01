@@ -78,7 +78,6 @@ exec --no-startup-id i3-msg 'workspace $ws4; exec thunderbird'
 exec --no-startup-id i3-msg 'workspace $ws7; exec spotify'
 exec --no-startup-id i3-msg 'workspace $ws1; exec alacritty'
 exec --no-startup-id restore-pdf-layout
-exec --no-startup-id i3-msg 'workspace $ws1'
 
 # Always run on reload
 exec_always --no-startup-id autorandr --change --skip-options x-prop-colorspace,x-prop-broadcast_rgb
