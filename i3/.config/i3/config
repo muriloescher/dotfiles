@@ -46,6 +46,7 @@ assign [class="Spotify"] $ws7
 
 # Workspace → monitor assignments
 workspace $ws2 output DisplayPort-0
+workspace $ws3 output HDMI-A-0
 workspace $ws4 output eDP
 workspace $ws6 output HDMI-A-0
 workspace $ws7 output eDP
