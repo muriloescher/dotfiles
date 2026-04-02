@@ -45,6 +45,7 @@ assign [class="Zathura"] $ws6
 assign [class="Spotify"] $ws7
 
 # Workspace → monitor assignments
+workspace $ws1 output eDP
 workspace $ws2 output DisplayPort-0
 workspace $ws3 output HDMI-A-0
 workspace $ws4 output eDP
@@ -72,11 +73,11 @@ exec --no-startup-id nm-applet
 exec --no-startup-id xautolock -time 10 -locker $HOME/.config/i3/lock-if-battery.sh
 
 # Startup apps
+exec --no-startup-id i3-msg 'workspace $ws1; exec alacritty'
 exec --no-startup-id i3-msg 'workspace $ws2; exec firefox'
 # exec --no-startup-id i3-msg 'workspace $ws3; exec code'
 exec --no-startup-id i3-msg 'workspace $ws4; exec thunderbird'
 exec --no-startup-id i3-msg 'workspace $ws7; exec spotify'
-exec --no-startup-id i3-msg 'workspace $ws1; exec alacritty'
 exec --no-startup-id restore-pdf-layout
 
 # Always run on reload
