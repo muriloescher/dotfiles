@@ -24,6 +24,8 @@ unzip
 wget
 curl
 jq
+python3-pip
+xdotool
 neovim
 tmux
 thunderbird

@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+DICTATION_URL="https://raw.githubusercontent.com/ideasman42/nerd-dictation/main/nerd-dictation"
+BASE_DIR="$HOME/.config/nerd-dictation"
+MODELS_DIR="$BASE_DIR/models"
+DEFAULT_MODEL_LINK="$BASE_DIR/model"
+LOCAL_BIN_DIR="$HOME/.local/bin"
+STATE_DIR="$HOME/.local/state/nerd-dictation"
+TMP_DIR="$(mktemp -d)"
+INSTALL_PT=0
+INSTALL_DE=0
+
+cleanup() {
+  rm -rf "$TMP_DIR"
+}
+
+usage() {
+  cat <<'EOF'
+Usage: setup-nerd-dictation [--with-pt] [--with-de]
+
+Installs nerd-dictation plus Vosk models.
+English is always installed. Portuguese and German are optional.
+EOF
+}
+
+download_and_extract_model() {
+  local url="$1"
+  local target_dir="$2"
+  local extracted_name="$3"
+  local zip_path extracted_dir
+
+  zip_path="$TMP_DIR/${url##*/}"
+
+  curl -fL --retry 3 --output "$zip_path" "$url"
+  unzip -q "$zip_path" -d "$TMP_DIR"
+
+  extracted_dir="$TMP_DIR/$extracted_name"
+  if [ ! -d "$extracted_dir" ]; then
+    printf 'Expected extracted model directory missing: %s\n' "$extracted_dir" >&2
+    exit 1
+  fi
+
+  rm -rf "$target_dir"
+  mkdir -p "$(dirname "$target_dir")"
+  mv "$extracted_dir" "$target_dir"
+}
+
+ensure_nerd_dictation() {
+  mkdir -p "$LOCAL_BIN_DIR"
+  rm -f "$LOCAL_BIN_DIR/nerd-dictation"
+  curl -fL --retry 3 --output "$LOCAL_BIN_DIR/nerd-dictation" "$DICTATION_URL"
+  chmod +x "$LOCAL_BIN_DIR/nerd-dictation"
+  python3 -m pip install --user --break-system-packages --upgrade vosk
+}
+
+setup_english_model() {
+  local nested_model="$DEFAULT_MODEL_LINK/vosk-model-en-us-0.22"
+  local english_model="$MODELS_DIR/en"
+  local english_zip="$BASE_DIR/vosk-model-en-us-0.22.zip"
+
+  mkdir -p "$MODELS_DIR"
+
+  if [ -d "$english_model" ]; then
+    return
+  fi
+
+  if [ -d "$nested_model" ]; then
+    mv "$nested_model" "$english_model"
+  elif [ -f "$english_zip" ]; then
+    download_and_extract_model "file://$english_zip" "$english_model" "vosk-model-en-us-0.22"
+  else
+    download_and_extract_model "https://alphacephei.com/vosk/models/vosk-model-en-us-0.22.zip" "$english_model" "vosk-model-en-us-0.22"
+  fi
+}
+
+normalize_default_model() {
+  local english_model="$MODELS_DIR/en"
+
+  if [ -L "$DEFAULT_MODEL_LINK" ] || [ -d "$DEFAULT_MODEL_LINK" ]; then
+    rm -rf "$DEFAULT_MODEL_LINK"
+  fi
+
+  ln -s "$english_model" "$DEFAULT_MODEL_LINK"
+}
+
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --with-pt)
+      INSTALL_PT=1
+      ;;
+    --with-de)
+      INSTALL_DE=1
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      printf 'Unknown option: %s\n' "$1" >&2
+      usage >&2
+      exit 1
+      ;;
+  esac
+  shift
+done
+
+trap cleanup EXIT
+
+for command_name in curl unzip python3; do
+  if ! command -v "$command_name" >/dev/null 2>&1; then
+    printf 'Missing required command: %s\n' "$command_name" >&2
+    exit 1
+  fi
+done
+
+mkdir -p "$BASE_DIR" "$MODELS_DIR" "$STATE_DIR"
+
+ensure_nerd_dictation
+setup_english_model
+
+if [ "$INSTALL_PT" -eq 1 ] && [ ! -d "$MODELS_DIR/pt" ]; then
+  download_and_extract_model "https://alphacephei.com/vosk/models/vosk-model-pt-fb-v0.1.1-20220516_2113.zip" "$MODELS_DIR/pt" "vosk-model-pt-fb-v0.1.1-20220516_2113"
+fi
+
+if [ "$INSTALL_DE" -eq 1 ] && [ ! -d "$MODELS_DIR/de" ]; then
+  download_and_extract_model "https://alphacephei.com/vosk/models/vosk-model-de-0.21.zip" "$MODELS_DIR/de" "vosk-model-de-0.21"
+fi
+
+normalize_default_model
+
+printf 'nerd-dictation setup complete.\n'
+printf 'Installed models:\n'
+printf '  en -> %s\n' "$MODELS_DIR/en"
+if [ -d "$MODELS_DIR/pt" ]; then
+  printf '  pt -> %s\n' "$MODELS_DIR/pt"
+fi
+if [ -d "$MODELS_DIR/de" ]; then
+  printf '  de -> %s\n' "$MODELS_DIR/de"
+fi

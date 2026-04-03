@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+language="${1:-en}"
+state_dir="$HOME/.local/state/nerd-dictation"
+active_file="$state_dir/active"
+language_file="$state_dir/language"
+config_dir="$HOME/.config/nerd-dictation"
+
+case "$language" in
+  en)
+    model_dir="$config_dir/models/en"
+    ;;
+  pt)
+    model_dir="$config_dir/models/pt"
+    ;;
+  de)
+    model_dir="$config_dir/models/de"
+    ;;
+  *)
+    printf 'Unsupported dictation language: %s\n' "$language" >&2
+    printf 'Supported languages: en, pt, de\n' >&2
+    exit 1
+    ;;
+esac
+
+if [ ! -d "$model_dir" ]; then
+  printf 'Missing Vosk model for %s at %s\n' "$language" "$model_dir" >&2
+  printf 'Run setup-nerd-dictation to install it.\n' >&2
+  exit 1
+fi
+
+mkdir -p "$state_dir"
+printf '%s\n' "$language" > "$language_file"
+touch "$active_file"
+
+exec "$HOME/.local/bin/nerd-dictation" begin --vosk-model-dir="$model_dir"

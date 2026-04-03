@@ -10,6 +10,7 @@ STOW_PACKAGES=(
   polybar
   rofi
   alacritty
+  dictation
   scripts
   wallpapers
   tmux

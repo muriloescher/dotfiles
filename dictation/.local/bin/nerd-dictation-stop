@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+state_dir="$HOME/.local/state/nerd-dictation"
+
+"$HOME/.local/bin/nerd-dictation" end || true
+rm -f "$state_dir/active" "$state_dir/language"
