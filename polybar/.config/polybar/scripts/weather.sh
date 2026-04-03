@@ -8,7 +8,7 @@ REFRESH_SECONDS=900
 LOCATION_ICON=""
 
 format_location() {
-  perl -CS -Mutf8 -pe 's/^\s+|\s+$//g; s/^(.)/uc($1)/e'
+  perl -CS -Mutf8 -pe 's/^\s+|\s+$//g; s/,.*$//; s/^\s+|\s+$//g; s/^(.)/uc($1)/e'
 }
 
 fetch_weather() {
