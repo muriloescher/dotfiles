@@ -6,9 +6,20 @@ CACHE_FILE="$CACHE_DIR/zathura-open-files"
 
 mkdir -p "$CACHE_DIR"
 
-pgrep -af zathura | awk '
-{
-    for (i = 3; i <= NF; i++) {
-        printf "%s%s", $i, (i < NF ? OFS : ORS)
-    }
-}' > "$CACHE_FILE"
+if pgrep_output="$(pgrep -af zathura)"; then
+    printf '%s\n' "$pgrep_output" | awk '
+    {
+        for (i = 3; i <= NF; i++) {
+            printf "%s%s", $i, (i < NF ? OFS : ORS)
+        }
+    }' > "$CACHE_FILE"
+else
+    pgrep_status=$?
+
+    if [ "$pgrep_status" -eq 1 ]; then
+        : > "$CACHE_FILE"
+        exit 0
+    fi
+
+    exit "$pgrep_status"
+fi
