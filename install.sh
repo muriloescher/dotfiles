@@ -6,6 +6,7 @@ PACKAGES_FILE="${DOTFILES_DIR}/packages.txt"
 
 STOW_PACKAGES=(
   i3
+  autorandr
   picom
   polybar
   rofi
