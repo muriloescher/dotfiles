@@ -69,6 +69,7 @@ set $uniroot $HOME/Documents/uni/master
 exec --no-startup-id dex --autostart --environment i3
 
 # Tray / background services
+exec_always --no-startup-id ~/.config/i3/launch-dunst.sh
 exec --no-startup-id nm-applet
 exec --no-startup-id xautolock -time 10 -locker $HOME/.config/i3/lock-if-battery.sh
 

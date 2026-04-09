@@ -1,6 +1,7 @@
 git
 stow
 i3
+dunst
 picom
 polybar
 rofi

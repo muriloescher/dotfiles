@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+FOCUSRITE="alsa_output.usb-Focusrite_Scarlett_Solo_4th_Gen_S1ZN8X7381E78D-00.analog-stereo"
+ANALOG="alsa_output.pci-0000_05_00.6.analog-stereo"
+
+CURRENT=$(pactl get-default-sink)
+
+if [[ "$CURRENT" == "$FOCUSRITE" ]]; then
+    pactl set-default-sink "$ANALOG"
+    pactl move-sink-input $(pactl list short sink-inputs | awk '{print $1}') "$ANALOG" 2>/dev/null
+    notify-send "Audio → Analog output"
+else
+    pactl set-default-sink "$FOCUSRITE"
+    pactl move-sink-input $(pactl list short sink-inputs | awk '{print $1}') "$FOCUSRITE" 2>/dev/null
+    notify-send "Audio → Focusrite"
+fi
