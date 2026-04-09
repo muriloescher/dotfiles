@@ -3,6 +3,8 @@
 LAPTOP="eDP"
 LEFT="DisplayPort-2"
 RIGHT="DisplayPort-1"
+DOCKED_DPI="96"
+LAPTOP_DPI="110"
 
 is_connected() {
     xrandr --query | grep -q "^$1 connected"
@@ -33,6 +35,8 @@ WS_VM="9:vm"
 WS_EXTRA="10:extra"
 
 if is_connected "$LEFT" && is_connected "$RIGHT"; then
+    xrandr --dpi "$DOCKED_DPI"
+
     move_ws_if_exists "$WS_FIREFOX" "$LEFT"
     move_ws_if_exists "$WS_CODE" "$RIGHT"
     move_ws_if_exists "$WS_TERM" "$LAPTOP"
@@ -45,6 +49,8 @@ if is_connected "$LEFT" && is_connected "$RIGHT"; then
     move_ws_if_exists "$WS_VM" "$RIGHT"
     move_ws_if_exists "$WS_EXTRA" "$RIGHT"
 else
+    xrandr --dpi "$LAPTOP_DPI"
+
     for ws in \
         "$WS_TERM" "$WS_FIREFOX" "$WS_CODE" "$WS_EMAIL" "$WS_FILES" \
         "$WS_DOCS" "$WS_SPOTIFY" "$WS_MISC" "$WS_VM" "$WS_EXTRA"
