@@ -230,6 +230,9 @@ bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 bindsym XF86MonBrightnessUp exec --no-startup-id brightnessctl set +10%
 bindsym XF86MonBrightnessDown exec --no-startup-id brightnessctl set 10%-
 
+# Toggle audio output route
+bindsym $mod+F6 exec --no-startup-id $HOME/.local/bin/toggle-audio
+
 
 # =========================
 # Screenshots
