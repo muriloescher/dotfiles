@@ -48,6 +48,25 @@ if is_connected "$LEFT" && is_connected "$RIGHT"; then
     move_ws_if_exists "$WS_MISC" "$LAPTOP"
     move_ws_if_exists "$WS_VM" "$RIGHT"
     move_ws_if_exists "$WS_EXTRA" "$RIGHT"
+elif is_connected "$LEFT" || is_connected "$RIGHT"; then
+    xrandr --dpi "$DOCKED_DPI"
+
+    EXT="$RIGHT"
+    if is_connected "$LEFT"; then
+        EXT="$LEFT"
+    fi
+
+    move_ws_if_exists "$WS_FIREFOX" "$EXT"
+    move_ws_if_exists "$WS_CODE" "$EXT"
+    move_ws_if_exists "$WS_DOCS" "$EXT"
+    move_ws_if_exists "$WS_FILES" "$EXT"
+    move_ws_if_exists "$WS_VM" "$EXT"
+    move_ws_if_exists "$WS_EXTRA" "$EXT"
+
+    move_ws_if_exists "$WS_TERM" "$LAPTOP"
+    move_ws_if_exists "$WS_EMAIL" "$LAPTOP"
+    move_ws_if_exists "$WS_SPOTIFY" "$LAPTOP"
+    move_ws_if_exists "$WS_MISC" "$LAPTOP"
 else
     xrandr --dpi "$LAPTOP_DPI"
 

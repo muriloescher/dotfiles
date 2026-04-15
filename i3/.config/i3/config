@@ -46,10 +46,10 @@ assign [class="Spotify"] $ws7
 
 # Workspace → monitor assignments
 workspace $ws1 output eDP
-workspace $ws2 output DisplayPort-2
-workspace $ws3 output DisplayPort-1
+workspace $ws2 output DisplayPort-2 DisplayPort-1 eDP
+workspace $ws3 output DisplayPort-1 DisplayPort-2 eDP
 workspace $ws4 output eDP
-workspace $ws6 output DisplayPort-1
+workspace $ws6 output DisplayPort-1 DisplayPort-2 eDP
 workspace $ws7 output eDP
 
 
