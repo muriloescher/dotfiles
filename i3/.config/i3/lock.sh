@@ -8,35 +8,37 @@ if [[ ! -f "$PNG" ]]; then
   exit 1
 fi
 
-GEOM="$(
-  xrandr | awk '
-    /^eDP[[:space:]]connected/ {
-      for (i = 1; i <= NF; i++) {
-        if ($i ~ /^[0-9]+x[0-9]+\+[0-9]+\+[0-9]+$/) {
-          print $i
-          exit
-        }
-      }
+EDP_SCREEN="$(
+  xrandr --listactivemonitors 2>/dev/null | awk '
+    $NF ~ /^eDP/ {
+      sub(/:/, "", $1)
+      print $1
+      exit
     }
   '
 )"
 
-if [[ -z "${GEOM:-}" ]]; then
-  echo "Could not detect eDP geometry from xrandr" >&2
+if [[ -z "${EDP_SCREEN:-}" ]]; then
+  echo "Could not detect eDP monitor index from xrandr --listactivemonitors" >&2
   exit 1
 fi
 
-IFS='x+' read -r W H X Y <<< "$GEOM"
-
-CENTER_X=$((X + W / 2))
-CENTER_Y=$((Y + H / 2))
-
-exec i3lock \
+i3lock \
+  --nofork \
   --image "$PNG" \
   --indicator \
-  --ind-pos "$CENTER_X:$CENTER_Y" \
+  --screen "$EDP_SCREEN" \
+  --ind-pos 'x+w/2:y+h/2' \
   --ring-color=ffffffff \
   --inside-color=00000088 \
   --line-color=00000000 \
   --separator-color=00000000 \
-  --ignore-empty-password
+  --ignore-empty-password &
+
+LOCK_PID=$!
+
+# Turn the display off once i3lock has grabbed input.
+sleep 0.2
+xset dpms force off || true
+
+wait "$LOCK_PID"
