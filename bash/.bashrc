@@ -119,7 +119,8 @@ if ! shopt -oq posix; then
 fi
 
 alias tum='cd ~/Documents/uni/master/'
-alias ls='ls --color=auto -av'
+#alias ls='ls --color=auto -av'
+alias ls='ls --color=auto'
 alias t="tmux new -As"
 alias bye='save-pdf-layout && poweroff'
 
@@ -129,3 +130,19 @@ export PATH=/home/murilo/.opencode/bin:$PATH
 # Created by `pipx` on 2026-03-07 19:24:05
 export PATH="$PATH:/home/murilo/.local/bin"
 alias fd=fdfind
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/murilo/anaconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/murilo/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/murilo/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/murilo/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+

@@ -3,8 +3,8 @@
 LAPTOP="eDP"
 LEFT="DisplayPort-2"
 RIGHT="DisplayPort-1"
-DOCKED_DPI="96"
-LAPTOP_DPI="110"
+DOCKED_DPI="100"
+LAPTOP_DPI="100"
 
 is_connected() {
     xrandr --query | grep -q "^$1 connected"
