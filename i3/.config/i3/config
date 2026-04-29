@@ -108,10 +108,10 @@ bindsym $mod+Return exec alacritty
 bindsym $mod+d exec rofi -show drun -theme ~/.config/rofi/theme.rasi
 
 # File launcher (any file from home)
-bindsym $mod+Shift+f exec --no-startup-id bash -lc 'fdfind . "$fileroot" 2>/dev/null | sed "s|^$fileroot/||" | rofi -dmenu -i -p "Files" -theme ~/.config/rofi/theme.rasi | xargs -r -I{} xdg-open "$fileroot/{}"'
+bindsym $mod+Ctrl+f exec --no-startup-id bash -lc 'fdfind . "$fileroot" 2>/dev/null | sed "s|^$fileroot/||" | rofi -dmenu -i -p "Files" -theme ~/.config/rofi/theme.rasi | xargs -r -I{} xdg-open "$fileroot/{}"'
 
 # University PDF launcher
-bindsym $mod+Ctrl+f exec --no-startup-id bash -lc 'fdfind -I -e pdf . "$uniroot" 2>/dev/null | sed "s|^$uniroot/||" | rofi -dmenu -i -p "Uni PDFs" -theme ~/.config/rofi/theme.rasi | xargs -r -I{} zathura "$uniroot/{}"'
+bindsym $mod+Shift+f exec --no-startup-id ~/.config/i3/uni-pdf-picker.sh
 
 
 # =========================
