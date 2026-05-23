@@ -1,8 +1,10 @@
 #!/bin/sh
 
 LAPTOP="eDP"
-LEFT="DisplayPort-2"
-RIGHT="DisplayPort-1"
+LEFT_PRIMARY="DisplayPort-2"
+RIGHT_PRIMARY="DisplayPort-1"
+LEFT_ALT="DisplayPort-4"
+RIGHT_ALT="DisplayPort-3"
 DOCKED_DPI="100"
 LAPTOP_DPI="100"
 
@@ -23,6 +25,17 @@ move_ws_if_exists() {
     fi
 }
 
+first_connected() {
+    for output in "$@"; do
+        if is_connected "$output"; then
+            printf '%s\n' "$output"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 WS_TERM="1:term"
 WS_FIREFOX="2:web"
 WS_CODE="3:code"
@@ -34,7 +47,10 @@ WS_MISC="8:misc"
 WS_VM="9:vm"
 WS_EXTRA="10:extra"
 
-if is_connected "$LEFT" && is_connected "$RIGHT"; then
+LEFT="$(first_connected "$LEFT_PRIMARY" "$LEFT_ALT")"
+RIGHT="$(first_connected "$RIGHT_PRIMARY" "$RIGHT_ALT")"
+
+if [ -n "$LEFT" ] && [ -n "$RIGHT" ]; then
     xrandr --dpi "$DOCKED_DPI"
 
     move_ws_if_exists "$WS_FIREFOX" "$LEFT"
@@ -48,11 +64,11 @@ if is_connected "$LEFT" && is_connected "$RIGHT"; then
     move_ws_if_exists "$WS_MISC" "$LAPTOP"
     move_ws_if_exists "$WS_VM" "$RIGHT"
     move_ws_if_exists "$WS_EXTRA" "$RIGHT"
-elif is_connected "$LEFT" || is_connected "$RIGHT"; then
+elif [ -n "$LEFT" ] || [ -n "$RIGHT" ]; then
     xrandr --dpi "$DOCKED_DPI"
 
     EXT="$RIGHT"
-    if is_connected "$LEFT"; then
+    if [ -n "$LEFT" ]; then
         EXT="$LEFT"
     fi
 
