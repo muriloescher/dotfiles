@@ -31,7 +31,7 @@ x-prop-underscan_vborder 0
 output eDP
 crtc 0
 mode 2560x1600
-pos 1233x1440
+pos 2560x1440
 primary
 rate 120.00
 x-prop-colorspace Default

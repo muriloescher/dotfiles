@@ -53,13 +53,13 @@ RIGHT="$(first_connected "$RIGHT_PRIMARY" "$RIGHT_ALT")"
 if [ -n "$LEFT" ] && [ -n "$RIGHT" ]; then
     xrandr --dpi "$DOCKED_DPI"
 
-    move_ws_if_exists "$WS_FIREFOX" "$LEFT"
-    move_ws_if_exists "$WS_CODE" "$RIGHT"
+    move_ws_if_exists "$WS_FIREFOX" "$RIGHT"
+    move_ws_if_exists "$WS_CODE" "$LEFT"
     move_ws_if_exists "$WS_TERM" "$LAPTOP"
     move_ws_if_exists "$WS_SPOTIFY" "$LAPTOP"
 
     move_ws_if_exists "$WS_EMAIL" "$LAPTOP"
-    move_ws_if_exists "$WS_DOCS" "$RIGHT"
+    move_ws_if_exists "$WS_DOCS" "$LEFT"
     move_ws_if_exists "$WS_FILES" "$RIGHT"
     move_ws_if_exists "$WS_MISC" "$LAPTOP"
     move_ws_if_exists "$WS_VM" "$RIGHT"
